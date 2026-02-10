@@ -2,8 +2,7 @@ import whisper
 import pyaudio
 import os
 import wave
-import time
-from datetime import datetime
+
 
 MODEL_TYPE = "base"
 SESSION_FILE = "transcription_output.txt"
