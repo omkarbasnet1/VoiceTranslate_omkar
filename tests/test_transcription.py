@@ -12,8 +12,6 @@ def test_audio_transcription(model):
 
     result = model.transcribe(audio_path)
     text = result["text"].lower().strip()
-
     # result
     expected_word = "test"
-    assert expected_word in text, f"transcription failed' {expected_word}'"
-    print(f"test success! the model received:' {text}'")
+    assert expected_word in text, f"transcription failed' {expected_word}' but got: '{text}'"
