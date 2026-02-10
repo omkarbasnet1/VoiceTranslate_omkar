@@ -1,8 +1,6 @@
 import pytest
 import whisper
 
-
-
 # test setup
 @pytest.fixture(scope="module")
 def model():
@@ -17,6 +15,5 @@ def test_audio_transcription(model):
 
     # result
     expected_word = "test"
-    assert expected_word in text, f"transcription failed' {expected_word}' "
+    assert expected_word in text, f"transcription failed' {expected_word}'"
     print(f"test success! the model received:' {text}'")
-
