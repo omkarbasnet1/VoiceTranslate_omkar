@@ -25,7 +25,6 @@ jobs:
         python-version: "3.10"
         
     # steps added
-    # This is the only new part. We need audio drivers for Whisper/PyAudio.
     - name: Install System Dependencies
       run: |
         sudo apt-get update
