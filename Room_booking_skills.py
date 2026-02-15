@@ -11,6 +11,7 @@ import requests
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
+
 # Configuration and Setup
 def load_env():
     load_dotenv()
@@ -79,7 +80,6 @@ def available_rooms(server_host, tokens):
     except Exception as e:
         print(f"Error getting rooms: {e}")
         return None
-
 
 
 # For room book
@@ -219,6 +219,7 @@ def main():
         cancel_my_booking(base, token, booking_id)
     else:
         print(" No booking ID found to cancel")
+
 
 if __name__ == "__main__":
     main()

@@ -19,6 +19,7 @@ from Room_booking_skills import (
     cancel_my_booking
 )
 
+
 # Fixture to load credentials once.
 @pytest.fixture(scope="module")
 def config():
@@ -26,7 +27,6 @@ def config():
     if not credentials:
         pytest.fail("Credentials not configured")
     return credentials
-
 
 
 # Fixture to log in once and provide the token to all tests.
@@ -64,7 +64,6 @@ def test_available_rooms(config, auth_token):
         assert 'room_name' in first_room
     else:
         assert 'name' in first_room, "Missing name"
-
 
 
 # Test 3 for booking  and duplicate booking should be blocked
