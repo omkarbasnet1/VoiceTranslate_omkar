@@ -6,8 +6,13 @@ Author: Omkar Basnet
             test 2 for get available rooms and check data
             test 3 for book a room, then same room same time should be failed.
 """
+import sys
+import os
 import pytest
 from datetime import datetime, timedelta
+
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import
 from Room_booking_skills import (
