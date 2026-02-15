@@ -42,7 +42,7 @@ jobs:
         # stop the build if code is bad
         flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
     # steps added
-    - name: Create .env file from Secrets
+    - name: Create .env file
       env:
         SERVER_URL: ${{ secrets.SERVER_URL }}
         USER_EMAIL: ${{ secrets.USER_EMAIL }}
