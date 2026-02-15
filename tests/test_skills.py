@@ -23,10 +23,10 @@ from Room_booking_skills import (
 # Fixture to load credentials
 @pytest.fixture(scope="module")
 def config():
-    credentials = load_env()
-    if not credentials:
-        pytest.fail("Credentials not configured")
-    return credentials
+    conf = load_env()
+    if not conf:
+        pytest.fail("cannot run .env missing")
+    return conf
 
 
 # Fixture to log in once and provide the token to all tests
@@ -38,22 +38,24 @@ def auth_token(config):
         config["user_password"]
     )
     if not token:
-        pytest.fail("Authentication failed")
+        pytest.fail("login failed")
     return token
 
 
 # Test 1 log in and get a valid token string
 def test_login(auth_token):
-    print("\n Test 1 :Login Verification")
-    assert auth_token is not None  # should not be empty
+    print("\n Check login is working")
+    assert auth_token is not None
     assert isinstance(auth_token, str)
     assert len(auth_token) > 10
+    print(f" got token, length = {len(auth_token)}")
 
 
 # Test 2 for available rooms
 def test_available_rooms(config, auth_token):
     print("\n Test 2: Get available rooms")
     rooms = available_rooms(config["server_host"], auth_token)
+    # should come back a list
     assert isinstance(rooms, list)
     assert len(rooms) > 0
 
@@ -65,18 +67,21 @@ def test_available_rooms(config, auth_token):
     else:
         assert 'name' in first_room, "Missing name"
 
+    print(f" found {len(rooms)} room, first id = {first_room['id']}")
+
 
 # Test 3 for booking  and duplicate booking should be blocked
 def test_booking_room(config, auth_token):
     rooms = available_rooms(config["server_host"], auth_token)
+    assert rooms and len(rooms) > 0
     target_room = rooms[0]['id']
 
-    # book for tomorrow
-    tomorrow = (datetime.now() + timedelta(days=2)).replace(hour=12, minute=0, second=0)
+    # for booking
+    tomorrow = (datetime.now() + timedelta(days=2)).replace(hour=8, minute=0, second=0)
     time_str = tomorrow.strftime("%Y-%m-%dT%H:%M:%S")
+    print(f"Attempting to book Room{target_room} at {time_str}")
 
     # first booking room
-    print(f"Attempting to book Room{target_room} at {time_str}")
     result = reserve_room(config["server_host"], auth_token, target_room, time_str, duration=15)
     assert result is not None, "First booking failed"
     print(" First booking successful")

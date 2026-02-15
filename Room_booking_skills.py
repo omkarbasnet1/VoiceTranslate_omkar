@@ -1,6 +1,6 @@
 """
 Room Booking reserve for project 2
-Author:Omkar Basnet
+Author: Omkar Basnet
        Software Engineering course
        Graduate Student
 This program helps to connect to the meeting room booking and lets you books rooms and show available rooms.
@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 
-# Configuration and Setup
+# read .env for url, email and password
 def load_env():
     load_dotenv()
     env_secrets = {
@@ -20,22 +20,14 @@ def load_env():
         "user_email": os.getenv("USER_EMAIL"),
         "user_password": os.getenv("USER_PASSWORD")
     }
+    # check all three
     if not env_secrets["server_host"] or not env_secrets["user_email"]:
         print("ERROR: Missing in .env file")
         return None
     return env_secrets
 
 
-# HELPER to handle server
-def helper_response(response, expected_code=200):
-    if response.status_code == expected_code or response.status_code == 201:
-        return response.json()
-    else:
-        print(f"Error {response.status_code}: {response.text}")
-        return None
-
-
-# For admin login
+# for post to logins endpoint and access token from the response
 def do_login(server_host, email, password):
     base = server_host.rstrip("/")
     login_url = f"{base}/api/v1/member/login/"
@@ -65,24 +57,23 @@ def do_login(server_host, email, password):
         return None
 
 
-# for checking the available rooms
+# for checking the available rooms from server and return the list
 def available_rooms(server_host, tokens):
     base = server_host.rstrip("/")
     url = f"{base}/api/v1/meeting-rooms/available/"
     headers = {"Authorization": f"Bearer {tokens}"}
-    try:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            print(f"Error available room: {response.status_code}")
-            return None
-    except Exception as e:
-        print(f"Error getting rooms: {e}")
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        print(f" couldn't get rooms, server :{response.status_code}")
+        print(response.text)
         return None
 
+    rooms = response.json()
+    print(f"server return {len(rooms)} room")
+    return rooms
 
-# For room book
+
+# For room book and using iso time
 def reserve_room(server_host, token, room_id, iso_time, duration=15):
     base = server_host.rstrip("/")
     url = f"{base}/api/v1/meeting-rooms/{room_id}/book/"
@@ -108,9 +99,10 @@ def reserve_room(server_host, token, room_id, iso_time, duration=15):
     response = requests.post(url, json=data, headers=headers)
     if response.status_code == 200 or response.status_code == 201:
         return response.json()
-    else:
-        print(f"Booking failed: {response.status_code}")
-        return None
+
+    print(f"Booking failed: {response.status_code}")
+    print(f"server msg: {response.text}")
+    return None
 
 
 # Show all bookings from the account
@@ -124,7 +116,7 @@ def get_my_bookings(server_host, token):
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             bookings = response.json()
-            print(f" You have {len(bookings)} bookings(s)")
+            print(f" You have {len(bookings)} bookings")
             return bookings
         else:
             print(f"Couldn't get bookings:{response.status_code}")
@@ -144,17 +136,16 @@ def cancel_my_booking(server_host, token, booking_id):
     try:
         response = requests.delete(url, headers=headers)
 
-        # 204 no content is standard for delete success
+        # 204 no content
         if response.status_code == 200 or response.status_code == 204:
             print(f"Cancelled booking{booking_id}")
             return True
-        else:
-            print(f"Couldn't cancel: {response.status_code}")
-            print(f"Reason: {response.text}")
-            return False
 
+        print(f" it couldn't cancel: {response.status_code}")
+        print(f"Reason: {response.text}")
+        return False
     except Exception as e:
-        print(f"Error cancelling: {e}")
+        print(f"Error Cancelling: {e}")
         return False
 
 
@@ -180,7 +171,7 @@ def main():
     if room:
         print(f"Found {len(room)} room")
 
-        # Grab the first room
+        # take a first room
         first_room = room[0]
         room_id = first_room['id']
         print(f" will use Room ID : {room_id}")
