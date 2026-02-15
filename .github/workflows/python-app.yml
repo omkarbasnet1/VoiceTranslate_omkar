@@ -42,12 +42,14 @@ jobs:
         # stop the build if code is bad
         flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
     # steps added
-    - name: Create .env file from Secrets
+    - name: Create .env file
       env:
         SERVER_URL: ${{ secrets.SERVER_URL }}
         USER_EMAIL: ${{ secrets.USER_EMAIL }}
         USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
       run: |
+        if [ -z "$SERVER_URL" ]; then echo "DEBUG: SERVER_URL is EMPTY "; else echo "DEBUG: SERVER_URL found "; fi
+        if [ -z "$USER_EMAIL" ]; then echo "DEBUG: USER_EMAIL is EMPTY "; else echo "DEBUG: USER_EMAIL found "; fi
         echo "SERVER_URL=$SERVER_URL" >> .env
         echo "USER_EMAIL=$USER_EMAIL" >> .env
         echo "USER_PASSWORD=$USER_PASSWORD" >> .env
