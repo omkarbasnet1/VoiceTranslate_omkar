@@ -53,7 +53,7 @@ def do_login(server_host, email, password):
             if not token and "token" in data:
                 token = data["token"].get("access")
             if token:
-                print(f"Login Successful")
+                print("Login Successful")
                 return token
 
         print(f"Login fail: {response.status_code}")
