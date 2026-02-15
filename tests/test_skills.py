@@ -6,13 +6,8 @@ Author: Omkar Basnet
             test 2 for get available rooms and check data
             test 3 for book a room, then same room same time should be failed.
 """
-import sys
-import os
 import pytest
 from datetime import datetime, timedelta
-
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import
 from Room_booking_skills import (
@@ -25,7 +20,7 @@ from Room_booking_skills import (
 )
 
 
-# Fixture to load credentials once.
+# Fixture to load credentials
 @pytest.fixture(scope="module")
 def config():
     credentials = load_env()
@@ -34,7 +29,7 @@ def config():
     return credentials
 
 
-# Fixture to log in once and provide the token to all tests.
+# Fixture to log in once and provide the token to all tests
 @pytest.fixture(scope="module")
 def auth_token(config):
     token = do_login(
@@ -47,7 +42,7 @@ def auth_token(config):
     return token
 
 
-# Test 1 log in and get a valid token string.
+# Test 1 log in and get a valid token string
 def test_login(auth_token):
     print("\n Test 1 :Login Verification")
     assert auth_token is not None  # should not be empty
