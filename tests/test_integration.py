@@ -32,7 +32,7 @@ def setup_data():
     if not config:
         pytest.fail("missing .env file")
 
-    token = do_login(config["server_host"], config["user_email"], config["user_password"])
+    do_login(config["server_host"], config["user_email"], config["user_password"])
     agent = setup_agent()
     model = whisper.load_model("base")
 
