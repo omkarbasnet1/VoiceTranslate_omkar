@@ -1,13 +1,22 @@
+"""
+Voice driven room booking AI for Sprint 3
+Author: Omkar Basnet
+
+combines whisper speech to text with langchain agent
+speak into mic - transcribe - send to AI - AI uses tools to answer
+"""
 import whisper
 import pyaudio
 import os
 import wave
 
+from ai_agent import setup_agent, ask_agent
+
 
 MODEL_TYPE = "base"
 SESSION_FILE = "transcription_output.txt"
 
-
+#record audio from microphone
 def record_voice(duration=5, chunk_file="audio.wav"):
     data_size = 1024
     format_audio = pyaudio.paInt16
@@ -70,6 +79,8 @@ def main():
         print("Error while load the model")
         print(e)
         return
+    print(" Entering the AI Agent...")
+    my_agent = setup_agent()
 
     print(f" audio translation text will save on : {SESSION_FILE}")
     print(" Ctrl + c to stop")
@@ -77,14 +88,21 @@ def main():
     # main program loop
     try:
         while True:
-            record_voice(5, "audio.wav")  # record
+            record_voice(10, "audio.wav")  # record
 
             text = audio_transcription(model, "audio.wav")  # transcribe
 
-            # for save
+            # for save and AI processing
             if len(text) > 0:
-                print(f"\n Result : {text}")
+                print(f"\n Question : {text}")
                 save_file(text, SESSION_FILE)
+
+                if "terminate" in text.lower() or "stop" in text.lower():
+                    print("Termination keyword ")
+                    break
+                print("AI is Thinking..")
+                ai_response = ask_agent(my_agent, text)
+                print(f" AI: {ai_response}")
             else:
                 print(".", end="", flush=True)
 
