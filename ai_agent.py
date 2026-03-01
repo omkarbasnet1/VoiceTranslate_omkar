@@ -28,7 +28,7 @@ else:
 
 
 @tool
-def get_current_datetime() -> str:
+def get_datetime() -> str:
     """Returns the current date and time.
     """
     return datetime.now().strftime("%Y-%m-%d %I:%M %p")
@@ -58,7 +58,7 @@ def check_my_reservation() -> list:
 OLLAMA_MODEL = "granite4:1b"
 OLLAMA_BASE_URL = "http://localhost:11434"
 
-agent_tools = [get_current_datetime, check_available_rooms, check_my_reservation]
+agent_tools = [get_datetime, check_available_rooms, check_my_reservation]
 
 
 # create the langchain agent
