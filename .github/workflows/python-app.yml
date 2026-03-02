@@ -51,6 +51,13 @@ jobs:
         echo "SERVER_URL=$SERVER_URL" >> .env
         echo "USER_EMAIL=$USER_EMAIL" >> .env
         echo "USER_PASSWORD=$USER_PASSWORD" >> .env
+    # step added for Ollama
+    - name: Install and Start Ollama
+      run: |
+        curl -fsSL https://ollama.com/install.sh | sh
+        ollama serve &
+        sleep 5
+        ollama pull granite4:1bb
     - name: Test with pytest
       run: |
         pytest
