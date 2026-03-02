@@ -45,7 +45,7 @@ def test_end_agent(setup_data):
     host, token, agent, whisper_model = setup_data
 
     # Reserve a meeting room
-    print(f"For reservation.")
+    print("For reservation.")
     rooms = available_rooms(host, token)
     assert rooms and len(rooms) > 0, "No rooms available"
 
