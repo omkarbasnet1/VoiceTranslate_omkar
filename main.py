@@ -16,6 +16,7 @@ from ai_agent import setup_agent, ask_agent
 MODEL_TYPE = "base"
 SESSION_FILE = "transcription_output.txt"
 
+
 # record audio from microphone
 def record_voice(duration=5, chunk_file="audio.wav"):
     data_size = 1024
