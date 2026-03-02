@@ -55,7 +55,7 @@ jobs:
     - name: Install and Start Ollama
       run: |
         curl -fsSL https://ollama.com/install.sh | sh
-        ollama pull granite4:1bb
+        ollama pull granite4:1b
     - name: Test with pytest
       run: |
         pytest
