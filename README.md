@@ -4,8 +4,7 @@
 ***Room Booking Voice AI agent ***
 
 **Student:** Omkar Basnet
-**Course:** Software Engineering
-            Graduate Student
+**Course:** Software Engineering (Graduate Student)
 
 ## Project Overview
 This project is a voice activated AI agent capable of answering question about meeting room reservation.
@@ -33,19 +32,22 @@ This project runs the AI models locally on your machine, you need to download:
 
 ## how to run locally
 1. **python 3.10**
-2. **FFmpeg:** Required by the OpenAI Whisper library for audio processing.
-  **Windows:** ' winget install ffmpeg'.
-  **Linux:** 'sudo apt-get install ffmpeg'.
-  **Mac**: 'brew install ffmpeg'.
-
-### Secrets key
-It requires authentication to communicate with the room booking API.
-This program uses .env file to keep credentials safe which has:
-    SERVER_URL, USER_EMAIL and USER_PASSWORD
-The workflow installs dependencies, creates a temporary .env file from the secrets
-
+2. **FFmpeg & PortAudio:** Required by the OpenAI Whisper library for audio processing adn PyAudio.
+  **Windows:**  winget install ffmpeg
+  **Linux:** sudo apt-get update && sudo apt-get install -y ffmpeg portaudio19-dev python3-pyaudio
+   **Mac**: brew install ffmpeg portaudio
+               
 ### Install dependencies:
 1. pip install -r requirements.txt
+   
+### Secrets key (.env)
+It requires authentication to communicate with the room booking API.
+This program uses .env file to keep credentials safe which has:
+    SERVER_URL = "http://server" 
+    USER_EMAIL = "email@example.com" 
+    USER_PASSWORD = "password"
+The workflow installs dependencies, creates a .env file from the secrets
+
 
 ### running the program
 1. Run the main application:
