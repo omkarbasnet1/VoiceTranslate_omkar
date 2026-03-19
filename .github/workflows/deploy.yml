@@ -1,0 +1,61 @@
+name: Django CI/CD Pipeline
+
+# This tells GitHub to run this script every time you push to the 'main' branch
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  test_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Grab your code
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    # 3. Install dependencies for testing
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest flake8 requests
+
+    # 4. Run Linting (Checks for syntax errors)
+    - name: Run Linter
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+    # 5. Run your Automated Tests
+    - name: Run Tests
+      run: |
+        pytest Test_db_manager.py
+
+    # 6. Deploy to DigitalOcean (ONLY runs if the linter and tests pass)
+    - name: Deploy to Server
+      if: success() 
+      uses: appleboy/ssh-action@master
+      with:
+        host: 167.71.178.212
+        username: root
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          # Navigate to where your server code lives (Update this if it's in /home/deploy instead!)
+          cd /opt/Room_booking_serve
+          
+          # Pull the latest code from GitHub
+          git pull origin main
+          
+          # Activate the virtual environment and install any new packages
+          source venv/bin/activate
+          pip install -r requirements.txt
+          
+          # Restart the server so changes take effect
+          # Note: If your professor uses a different service like gunicorn, you might need: systemctl restart gunicorn
+          pkill -f runserver || true
+          nohup python manage.py runserver 0.0.0.0:8000 > server.log 2>&1 &
