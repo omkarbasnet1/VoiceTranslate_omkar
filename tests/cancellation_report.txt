@@ -1,0 +1,16 @@
+
+ Room 'Test Room C' Deleted on 2026-03-17 17:54:05 
+Cancelled reservations for the usernames 
+ testuser123 
+
+ Room 'Test Room C' Deleted on 2026-03-17 17:55:04 
+Cancelled reservations for the usernames 
+ testuser123 
+
+ Room 'Test Room C' Deleted on 2026-03-18 13:47:34 
+Cancelled reservations for the usernames 
+ testuser123 
+
+ Room 'Test Room C' Deleted on 2026-03-18 14:05:13 
+Cancelled reservations for the usernames 
+ testuser123 

@@ -137,13 +137,24 @@ def cancel_my_booking(server_host, token, booking_id):
         response = requests.delete(url, headers=headers)
 
         # 204 no content
-        if response.status_code == 200 or response.status_code == 204:
-            print(f"Cancelled booking{booking_id}")
-            return True
+        if response.status_code == 204:
+            print(f"Cancelled booking {booking_id} successfully(204 No content).")
+            return True, "Successfully deleted"
+
+        if response.status_code == 200:
+            print(f"Cancelled booking{booking_id} successfully (200 OK).")
+            return True, "Successfully deleted"
+
+        error_msg = response.text
+        try:
+            if response.text:
+                error_msg = response.json()
+        except Exception:
+            pass
 
         print(f" it couldn't cancel: {response.status_code}")
         print(f"Reason: {response.text}")
-        return False
+        return False, f"Server Error: {error_msg}"
     except Exception as e:
         print(f"Error Cancelling: {e}")
         return False
@@ -190,6 +201,7 @@ def main():
     booking_id = None
     if result:
         print("Booking done")
+        print(f"  Debug: the server sent this data: {result}")
         if 'id' in result:
             booking_id = result['id']
         elif 'booking' in result and 'id' in result['booking']:

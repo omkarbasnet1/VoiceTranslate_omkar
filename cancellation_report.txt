@@ -1,0 +1,20 @@
+
+--- Room '18' Deleted on 2026-03-11 21:46:33 ---
+No existing reservations were affected.
+
+ Room '16' Deleted on 2026-03-12 14:42:27 
+No existing reservations 
+
+ Room 'Room 20' Deleted on 2026-03-12 14:50:40 
+No existing reservations 
+
+ Room 'Test Room C' Deleted on 2026-03-18 13:47:43 
+Cancelled reservations for the usernames 
+ testuser123 
+
+ Room 'Test Room C' Deleted on 2026-03-18 13:47:49 
+Cancelled reservations for the usernames 
+ testuser123 
+
+ Room '20 Room D' Deleted on 2026-03-18 16:28:46 
+No existing reservations 

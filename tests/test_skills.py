@@ -78,7 +78,7 @@ def test_booking_room(config, auth_token):
 
     # for booking
     (datetime.now() + timedelta(days=7)).replace(hour=15, minute=0, second=0)
-    time_str = "2027-05-08T10:00:00"
+    time_str = "2027-06-09T10:00:00"
     print(f"Attempting to book Room{target_room} at {time_str}")
 
     # first booking room

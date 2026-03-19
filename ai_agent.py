@@ -14,7 +14,9 @@ from Room_booking_skills import (
     load_env,
     do_login,
     available_rooms,
-    get_my_bookings
+    get_my_bookings,
+    reserve_room,
+    cancel_my_booking
 )
 
 # login first
@@ -53,12 +55,44 @@ def check_my_reservation() -> list:
     bookings = get_my_bookings(HOST, TOKEN)
     return bookings if bookings else []
 
+@tool
+def check_my_reservation() -> list:
+    """Returns a list of all existing room reservation"""
+    if not HOST or not TOKEN:
+        return ["Error: Not logged in to the server"]
+
+    bookings = get_my_bookings(HOST, TOKEN)
+    return bookings if bookings else []
+
+@tool
+def book_meeting_room(room_id: int, iso_time: str) -> str:
+    """Books a meeting room"""
+    if not HOST or not TOKEN:
+        return "Error: Not logged in to the server."
+
+    result = reserve_room(HOST, TOKEN, room_id, iso_time)
+    if result:
+        return f"Successfully booked room {room_id}. Details:{result}"
+    return f"Failed to book room {room_id}"
+
+@tool
+def cancel_meeting_reservation(booking_id: int) -> str:
+    """Cancel an existing room reservation """
+    if not HOST or not TOKEN:
+        return "Error: Not logged in to the server."
+
+    success, msg = cancel_my_booking(HOST, TOKEN, booking_id)
+    if success:
+        return f"Success: {msg}"
+    return f"Failed: {msg}"
+
+
 
 # ollama config
 OLLAMA_MODEL = "granite4:1b"
 OLLAMA_BASE_URL = "http://localhost:11434"
 
-agent_tools = [get_datetime, check_available_rooms, check_my_reservation]
+agent_tools = [get_datetime, check_available_rooms, check_my_reservation, book_meeting_room, cancel_meeting_reservation]
 
 
 # create the langchain agent
@@ -102,7 +136,7 @@ def ask_agent(agent, prompt_text: str) -> str:
 # test the agent if its run file directly
 if __name__ == "__main__":
     my_agent = setup_agent()
-    test_question = "Do i have any reservation tomorrow?"
+    test_question = "Do i have reservation for tomorrow?"
     print(f"\n User:{test_question}")
     answer = ask_agent(my_agent, test_question)
     print(f"AI: {answer}")
