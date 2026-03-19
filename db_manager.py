@@ -3,9 +3,11 @@ from datetime import datetime
 
 DB_FILE = "db.sqlite3"
 
+
 def get_connection():
     """Establishes and return a connection to the SQLite database."""
     return sqlite3.connect(DB_FILE)
+
 
 def get_all_rooms():
     """Helper function to fetch all rooms so it helps in UI can display them"""
@@ -16,12 +18,14 @@ def get_all_rooms():
     conn.close()
     return rooms
 
+
 def add_room(name: str, capacity: int):
     """Adds a new room to the database."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute("Insert INTO booking_meetingroom (room_name, capacity, is_active) VALUES (?, ? , 1)",(name, capacity))
+        cursor.execute("Insert INTO booking_meetingroom"
+                       "(room_name, capacity, is_active) VALUES (?, ? , 1)",(name, capacity))
         conn.commit()
         return True, f"Room '{name}' added successfully"
     except Exception as e:
@@ -29,12 +33,14 @@ def add_room(name: str, capacity: int):
     finally:
         conn.close()
 
+
 def update_room(name: str, new_capacity: int):
     """Updates the capacity"""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute("UPDATE booking_meetingroom SET capacity = ? WHERE room_name = ?", (new_capacity,name))
+        cursor.execute("UPDATE booking_meetingroom SET capacity = ? " 
+                       "WHERE room_name = ?", (new_capacity, name))
         if cursor.rowcount == 0:
             return False, f"Room '{name}' not found"
         conn.commit()
@@ -44,12 +50,12 @@ def update_room(name: str, new_capacity: int):
     finally:
         conn.close()
 
+
 def remove_room(name: str):
     """Removes a room, deletes its reservation and generates cancellation report."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
-
         cursor.execute("SELECT id FROM booking_meetingroom WHERE room_name = ?", (name,))
         room = cursor.fetchone()
         if not room:
@@ -66,9 +72,11 @@ def remove_room(name: str):
         cursor.execute(query, (room_id,))
         cancelled_users = [row[0] for row in cursor.fetchall()]
 
-        cursor.execute("DELETE FROM booking_bookinghistory WHERE meeting_room_id = ?", (room_id,))
+        cursor.execute("DELETE FROM booking_bookinghistory" 
+                       "WHERE meeting_room_id = ?", (room_id,))
 
-        cursor.execute("DELETE FROM booking_meetingroom WHERE id = ?", (room_id,))
+        cursor.execute("DELETE FROM booking_meetingroom" 
+                       "WHERE id = ?", (room_id,))
 
         conn.commit()
         with open("cancellation_report.txt", "a") as f:

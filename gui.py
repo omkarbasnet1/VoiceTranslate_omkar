@@ -18,7 +18,11 @@ class RoomMangerApp:
         """Builds all the text boxes, buttons and lists on the screen"""
 
         # Title
-        title_label = ttk.Label(self.window, text="Room Manager System", font=("Arial", 16, "bold"))
+        title_label = ttk.Label(
+            self.window,
+            text="Room Manager System",
+            font=("Arial", 16, "bold")
+        )
         title_label.pack(pady=(0, 15))
 
         # Input section
@@ -26,12 +30,18 @@ class RoomMangerApp:
         input_frame.pack(fill="x", pady=10)
 
         # Room Name Input
-        ttk.Label(input_frame, text="Room Name (e.g, Room A):").grid(row=0, column=0, sticky="w", pady=5)
+        ttk.Label(
+            input_frame,
+            text="Room Name (e.g, Room A):"
+        ).grid(row=0, column=0, sticky="w", pady=5)
         self.room_name_box = ttk.Entry(input_frame, width=30)
         self.room_name_box.grid(row=0, column=1, padx=10, pady=5)
 
         # Capacity Input
-        ttk.Label(input_frame, text="Capacity (number only):").grid(row=1, column=0, sticky="w", pady=5)
+        ttk.Label(
+            input_frame,
+            text="Capacity (number only):"
+        ).grid(row=1, column=0, sticky="w", pady=5)
         self.capacity_box = ttk.Entry(input_frame, width=30)
         self.capacity_box.grid(row=1, column=1, padx=10, pady=5)
 
@@ -40,15 +50,32 @@ class RoomMangerApp:
         button_frame.pack(pady=15)
 
         # action function
-        ttk.Button(button_frame, text="Add New Room", command=self.action_add_room).grid(row=0, column=0, padx=5)
-        ttk.Button(button_frame, text="Update Capacity", command=self.action_update_room).grid(row=0, column=1, padx=5)
-        ttk.Button(button_frame, text="Remove Room", command=self.action_remove_room).grid(row=0, column=2, padx=5)
+        ttk.Button(
+            button_frame,
+            text="Add New Room",
+            command=self.action_add_room
+        ).grid(row=0, column=0, padx=5)
+        ttk.Button(
+            button_frame,
+            text="Update Capacity",
+            command=self.action_update_room
+        ).grid(row=0, column=1, padx=5)
+        ttk.Button(button_frame,
+                   text="Remove Room",
+                   command=self.action_remove_room
+                   ).grid(row=0, column=2, padx=5)
 
         # display section
-        ttk.Label(self.window, text="Currently Available Rooms:", font=("Arial", 10, "bold")).pack(anchor="w")
+        ttk.Label(self.window,
+                  text="Currently Available Rooms:",
+                  font=("Arial", 10, "bold")
+                  ).pack(anchor="w")
 
         # Listbox to show the rooms
-        self.room_display_list = tk.Listbox(self.window, height=12, font=("Courier", 10))
+        self.room_display_list = tk.Listbox(
+            self.window,
+            height=12,
+            font=("Courier", 10))
         self.room_display_list.pack(fill="both", expand=True, pady=5)
 
     def load_rooms_from_database(self):
@@ -61,7 +88,9 @@ class RoomMangerApp:
             name = room[1]
             capacity = room[2]
 
-            display_text = f"ID: {room_id: <4} | Name: {name: <15} | Capacity: {capacity}"
+            display_text = (f"ID: {room_id: <4} | "
+                            f"Name: {name: <15} |"
+                            f" Capacity: {capacity}")
             self.room_display_list.insert(tk.END, display_text)
 
     def action_add_room(self):
@@ -69,7 +98,10 @@ class RoomMangerApp:
         capacity_text = self.capacity_box.get().strip()
 
         if not name or not capacity_text.isdigit():
-            messagebox.showwarning("Error", "Please type a valid room name and a number for capacity")
+            messagebox.showwarning(
+                "Error",
+                "Please type a valid room name and a number for capacity"
+            )
             return
 
         success, message = db_manager.add_room(name, int(capacity_text))
@@ -86,7 +118,10 @@ class RoomMangerApp:
         capacity_text = self.capacity_box.get().strip()
 
         if not name or not capacity_text.isdigit():
-            messagebox.showwarning("Error", "Please type a valid room name and a number for capacity")
+            messagebox.showwarning(
+                "Error",
+                "Please type a valid room name and a number for update"
+            )
             return
 
         success, message = db_manager.update_room(name, int(capacity_text))
@@ -101,13 +136,16 @@ class RoomMangerApp:
         name = self.room_name_box.get().strip()
 
         if not name:
-            messagebox.showwarning("Error", "Please type a valid  name and a number for capacity")
+            messagebox.showwarning(
+                "Error",
+                "Please type a valid  name to delete"
+            )
             return
 
         confirm = messagebox.askyesno(
             "confirm Deletion",
-            f"Are you sure you want to permanently delete '{name}' and cancel all its reservations?"
-
+            f"Are you sure you want to permanently delete '{name}' " 
+            f"and cancel all its reservations?"
         )
         if confirm:
             success, message = db_manager.remove_room(name)

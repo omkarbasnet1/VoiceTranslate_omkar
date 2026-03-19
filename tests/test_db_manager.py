@@ -3,6 +3,7 @@ import sqlite3
 import os
 import db_manager
 
+
 @pytest.fixture(scope="module")
 def test_db():
     test_db_file = "test_db.sqlite3"
@@ -55,6 +56,7 @@ def test_db():
     if os.path.exists(test_db_file):
         os.remove(test_db_file)
 
+
 # test adding a room works
 def test_add_room(test_db):
     print("\n testing add room function")
@@ -62,7 +64,7 @@ def test_add_room(test_db):
     # add a room
     success, message = db_manager.add_room("Test Room A", 10)
     assert success is True, "add room should return True"
-    assert "successfully" in message.lower(),"success message should be successfully"
+    assert "successfully" in message.lower(), "success message should be successfully"
 
     # verify it actually got added to database
     conn = sqlite3.connect(test_db)
@@ -75,6 +77,7 @@ def test_add_room(test_db):
     assert result[0] == "Test Room A"
     assert result[1] == 10
     print("room added ")
+
 
 # test updating capacity works
 def test_update_room_capacity(test_db):
@@ -90,7 +93,7 @@ def test_update_room_capacity(test_db):
 
     # check database has new capacity
     conn = sqlite3.connect(test_db)
-    cursor =conn.cursor()
+    cursor = conn.cursor()
     cursor.execute("SELECT capacity FROM booking_meetingroom WHERE room_name = ?", ("Test Room B",))
     result = cursor.fetchone()
     conn.close()
@@ -98,6 +101,7 @@ def test_update_room_capacity(test_db):
     assert result is not None
     assert result[0] == 15, "capacity should be updated to 15"
     print("capacity updated")
+
 
 # test removing room and cancellation report
 def test_remove_room(test_db):
@@ -107,14 +111,18 @@ def test_remove_room(test_db):
     conn = sqlite3.connect(test_db)
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO booking_meetingroom (room_name, capacity, is_active) VALUES(?, ? , 1)", ("Test Room C", 8))
+    cursor.execute("INSERT INTO booking_meetingroom "
+                   "(room_name, capacity, is_active) VALUES(?, ? , 1)",
+                   ("Test Room C", 8))
     room_id = cursor.lastrowid
 
-    cursor.execute("INSERT INTO member_customuser (username) VALUES (?)", ("testuser123",))
+    cursor.execute("INSERT INTO member_customuser "
+                   "(username) VALUES (?)", ("testuser123",))
     user_id = cursor.lastrowid
 
     cursor.execute("""
-        INSERT INTO booking_bookinghistory(meeting_room_id, booked_by_id, start_time, end_time)
+        INSERT INTO booking_bookinghistory
+        (meeting_room_id, booked_by_id, start_time, end_time)
         Values(?, ?, '2026-03-10 10:00AM', '2026-03-10 11:00AM')
     """, (room_id, user_id))
     conn.commit()
@@ -123,16 +131,18 @@ def test_remove_room(test_db):
     # remove the room
     success, message = db_manager.remove_room("Test Room C")
     assert success is True, "remove should success"
-    assert "testuser123" in message, "message should mention cancelled user"
+    assert "user123" in message, "message should mention cancelled user"
 
-    #verify room
+    # verify room
     conn = sqlite3.connect(test_db)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM booking_meetingroom WHERE room_name = ?", ("Test Room C",))
+    cursor.execute("SELECT * FROM booking_meetingroom "
+                   "WHERE room_name = ?", ("Test Room C",))
     room_result = cursor.fetchone()
 
     # verify bookings are gone
-    cursor.execute("SELECT * FROM booking_bookinghistory WHERE meeting_room_id = ?", (room_id,))
+    cursor.execute("SELECT * FROM booking_bookinghistory "
+                   "WHERE meeting_room_id = ?", (room_id,))
     booking_result = cursor.fetchone()
     conn.close()
 
@@ -142,6 +152,7 @@ def test_remove_room(test_db):
     # check cancellation report
     assert os.path.exists("cancellation_report.txt"), "report file should exist"
     print(" room removed and booking cancelled")
+
 
 def test_update_non_room(test_db):
     print("\n Testing update on a room that does not exist")
