@@ -40,7 +40,7 @@ def update_room(name: str, new_capacity: int):
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute("UPDATE booking_meetingroom SET capacity = ? WHERE room_name = ?",(new_capacity,name))
+        cursor.execute("UPDATE booking_meetingroom SET capacity = ? WHERE room_name = ?",(new_capacity, name))
         if cursor.rowcount == 0:
             return False, f"Room '{name}' not found"
         conn.commit()
