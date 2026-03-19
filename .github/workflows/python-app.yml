@@ -74,4 +74,5 @@ jobs:
           
           # Restart the main application
           pkill -f main.py || true
-          nohup python main.py > server.log 2>&1 &
+          nohup python3 main.py > server.log 2>&1 &
+          
