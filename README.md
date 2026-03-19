@@ -81,11 +81,11 @@ This project runs the AI models locally on your machine, you need to download:
    
 ### For Automated testing:
 1. Sprint 4 Tests
-   *  pytest -m tests/test_db_manager.py
+   *  pytest  tests/test_db_manager.py
 2. for other tests
-   * pytest -m tests/test_skills.py
-   * pytest -m tests/test_integration.py
-   * pytest -m tests/test_transcription.py 
+   * pytest  tests/test_skills.py
+   * pytest  tests/test_integration.py
+   * pytest  tests/test_transcription.py 
 
 
 
