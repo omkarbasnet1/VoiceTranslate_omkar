@@ -78,7 +78,7 @@ def test_booking_room(config, auth_token):
 
     # for booking
     (datetime.now() + timedelta(days=7)).replace(hour=15, minute=0, second=0)
-    time_str = "2027-06-09T10:00:00"
+    time_str = "2027-07-09T10:00:00"
     print(f"Attempting to book Room{target_room} at {time_str}")
 
     # first booking room
@@ -97,7 +97,7 @@ def test_booking_room(config, auth_token):
     if my_bookings:
         booking_id = my_bookings[-1]['id']
         cancel_book = cancel_my_booking(config["server_host"], auth_token, booking_id)
-        assert cancel_book is True, "cleanup failed"
+        assert cancel_book[0] is True, "cleanup failed"
         print(f" cleanup successful: cancelled Booking ID {booking_id}")
     else:
         print("Error: Could not find booking in list ")

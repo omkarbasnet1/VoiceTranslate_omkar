@@ -89,7 +89,7 @@ def test_end_agent(setup_data):
         booking_id = my_bookings[-1]['id']
         print(f"Found booking id :{booking_id}.. Cancelling..")
         cancel_success = cancel_my_booking(host, token, booking_id)
-        assert cancel_success is True, "failed to remove"
+        assert cancel_success[0] is True, "failed to remove"
     else:
         pytest.fail("don not find booking id to cancel")
 
