@@ -31,8 +31,7 @@ else:
 
 @tool
 def get_datetime() -> str:
-    """Returns the current date and time.
-    """
+    """Returns the current date and time."""
     return datetime.now().strftime("%Y-%m-%d %I:%M %p")
 
 
@@ -55,6 +54,7 @@ def check_my_reservation() -> list:
     bookings = get_my_bookings(HOST, TOKEN)
     return bookings if bookings else []
 
+
 @tool
 def check_my_reservation() -> list:
     """Returns a list of all existing room reservation"""
@@ -63,6 +63,7 @@ def check_my_reservation() -> list:
 
     bookings = get_my_bookings(HOST, TOKEN)
     return bookings if bookings else []
+
 
 @tool
 def book_meeting_room(room_id: int, iso_time: str) -> str:
@@ -75,6 +76,7 @@ def book_meeting_room(room_id: int, iso_time: str) -> str:
         return f"Successfully booked room {room_id}. Details:{result}"
     return f"Failed to book room {room_id}"
 
+
 @tool
 def cancel_meeting_reservation(booking_id: int) -> str:
     """Cancel an existing room reservation """
@@ -85,7 +87,6 @@ def cancel_meeting_reservation(booking_id: int) -> str:
     if success:
         return f"Success: {msg}"
     return f"Failed: {msg}"
-
 
 
 # ollama config
