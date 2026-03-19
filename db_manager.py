@@ -25,7 +25,8 @@ def add_room(name: str, capacity: int):
     cursor = conn.cursor()
     try:
         cursor.execute("Insert INTO booking_meetingroom"
-                       "(room_name, capacity, is_active) VALUES (?, ? , 1)",(name, capacity))
+                       "(room_name, capacity, is_active) VALUES (?, ? , 1)",
+                       (name, capacity))
         conn.commit()
         return True, f"Room '{name}' added successfully"
     except Exception as e:
@@ -40,7 +41,8 @@ def update_room(name: str, new_capacity: int):
     cursor = conn.cursor()
     try:
         cursor.execute("UPDATE booking_meetingroom SET capacity = ? " 
-                       "WHERE room_name = ?", (new_capacity, name))
+                       "WHERE room_name = ?",
+                       (new_capacity, name))
         if cursor.rowcount == 0:
             return False, f"Room '{name}' not found"
         conn.commit()
@@ -56,7 +58,9 @@ def remove_room(name: str):
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute("SELECT id FROM booking_meetingroom WHERE room_name = ?", (name,))
+        cursor.execute("SELECT id FROM booking_meetingroom "
+                       "WHERE room_name = ?",
+                       (name,))
         room = cursor.fetchone()
         if not room:
             return False, f"Room '{name}' not found."
@@ -67,13 +71,13 @@ def remove_room(name: str):
                 Select u.username
                 from booking_bookinghistory b
                 Join member_customuser u ON b.booked_by_id = u.id
-                Where b.meeting_room_id = ?
-        """
+                Where b.meeting_room_id = ? """
         cursor.execute(query, (room_id,))
         cancelled_users = [row[0] for row in cursor.fetchall()]
 
         cursor.execute("DELETE FROM booking_bookinghistory" 
-                       "WHERE meeting_room_id = ?", (room_id,))
+                       "WHERE meeting_room_id = ?",
+                       (room_id,))
 
         cursor.execute("DELETE FROM booking_meetingroom" 
                        "WHERE id = ?", (room_id,))
@@ -88,7 +92,6 @@ def remove_room(name: str):
                     f.write(f" {user} \n")
             else:
                 f.write("No existing reservations \n")
-
         if cancelled_users:
             unique_users = set(cancelled_users)
             user_list_str = ",".join(unique_users)

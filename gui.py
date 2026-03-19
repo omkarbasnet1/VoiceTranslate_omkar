@@ -66,10 +66,11 @@ class RoomMangerApp:
                    ).grid(row=0, column=2, padx=5)
 
         # display section
-        ttk.Label(self.window,
+        (ttk.Label(self.window,
                   text="Currently Available Rooms:",
                   font=("Arial", 10, "bold")
-                  ).pack(anchor="w")
+                  ).
+         pack(anchor="w"))
 
         # Listbox to show the rooms
         self.room_display_list = tk.Listbox(

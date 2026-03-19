@@ -47,16 +47,6 @@ def check_available_rooms() -> list:
 
 @tool
 def check_my_reservation() -> list:
-    """Returns a list of all existing room reservations for the current user."""
-    if not HOST or not TOKEN:
-        return ["Error: Not logged in to the server."]
-
-    bookings = get_my_bookings(HOST, TOKEN)
-    return bookings if bookings else []
-
-
-@tool
-def check_my_reservation() -> list:
     """Returns a list of all existing room reservation"""
     if not HOST or not TOKEN:
         return ["Error: Not logged in to the server"]
