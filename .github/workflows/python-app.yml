@@ -54,3 +54,30 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+  # NEW DEPLOYMENT JOB ADDED BELOW
+  deploy:
+    needs: build 
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' 
+    steps:
+    - name: Deploy to DigitalOcean
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DEPLOY_SERVER }}
+        username: ${{ secrets.DEPLOY_USER }}
+        key: ${{ secrets.DEPLOY_KEY }}
+        script: |
+          # Navigate to the server folder
+          cd Room_booking_serve
+          
+          # Pull latest code
+          git pull origin main
+          
+          # Setup environment and update
+          source venv/bin/activate
+          pip install -r requirements.txt
+          python manage.py migrate
+          
+          # Restart the server process
+          pkill -f runserver || true
+          nohup python manage.py runserver 0.0.0.0:8000 > server.log 2>&1 &
