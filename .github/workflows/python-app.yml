@@ -54,3 +54,29 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+  # NEW DEPLOYMENT JOB ADDED BELOW
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.DEPLOY_SERVER }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to droplet
+        run: |
+          ssh -i ~/.ssh/id_rsa deploy@${{ secrets.DEPLOY_SERVER }} "
+            cd ~/Room_booking_serve &&
+            git pull origin main &&
+            source venv/bin/activate &&
+            pip install -r requirements.txt &&
+            pkill -f main.py || true &&
+            nohup python3 main.py </dev/null > server.log 2>&1 &
+            "
+         
+          
