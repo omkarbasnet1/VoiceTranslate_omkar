@@ -66,11 +66,11 @@ class RoomMangerApp:
                    ).grid(row=0, column=2, padx=5)
 
         # display section
-        (ttk.Label(self.window,
+        ttk.Label(
+            self.window,
                   text="Currently Available Rooms:",
                   font=("Arial", 10, "bold")
-                  ).
-         pack(anchor="w"))
+        ). pack(anchor="w")
 
         # Listbox to show the rooms
         self.room_display_list = tk.Listbox(
@@ -145,8 +145,8 @@ class RoomMangerApp:
 
         confirm = messagebox.askyesno(
             "confirm Deletion",
-            f"Are you sure you want to permanently delete '{name}' " 
-            f"and cancel all its reservations?"
+            f"Are you sure you want to permanently delete'{name}' " 
+                    f"and cancel all its reservations?"
         )
         if confirm:
             success, message = db_manager.remove_room(name)

@@ -24,7 +24,7 @@ def add_room(name: str, capacity: int):
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute("Insert INTO booking_meetingroom"
+        cursor.execute("Insert INTO booking_meetingroom "
                        "(room_name, capacity, is_active) VALUES (?, ? , 1)",
                        (name, capacity))
         conn.commit()
@@ -75,11 +75,11 @@ def remove_room(name: str):
         cursor.execute(query, (room_id,))
         cancelled_users = [row[0] for row in cursor.fetchall()]
 
-        cursor.execute("DELETE FROM booking_bookinghistory" 
+        cursor.execute("DELETE FROM booking_bookinghistory " 
                        "WHERE meeting_room_id = ?",
                        (room_id,))
 
-        cursor.execute("DELETE FROM booking_meetingroom" 
+        cursor.execute("DELETE FROM booking_meetingroom " 
                        "WHERE id = ?", (room_id,))
 
         conn.commit()
@@ -95,7 +95,11 @@ def remove_room(name: str):
         if cancelled_users:
             unique_users = set(cancelled_users)
             user_list_str = ",".join(unique_users)
-            report_msg = f"Room '{name}' deleted.\n\nCancelled reservations for: {user_list_str}\n\n Report saved to cancellation_report.txt"
+            report_msg = (
+                f"Room '{name}' deleted.\n\n"
+                f"Cancelled reservations for: {user_list_str}\n\n"
+                "Report saved to cancellation_report.txt"
+            )
         else:
             report_msg = f"Room '{name}' deleted.\n\n No existing reservation."
 
