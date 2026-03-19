@@ -18,3 +18,7 @@ Cancelled reservations for the usernames
 
  Room '20 Room D' Deleted on 2026-03-18 16:28:46 
 No existing reservations 
+
+ Room 'Test Room C' Deleted on 2026-03-19 13:01:57 
+Cancelled reservations for the usernames 
+ testuser123 
