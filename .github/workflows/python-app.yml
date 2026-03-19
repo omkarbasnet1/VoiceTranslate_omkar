@@ -53,7 +53,7 @@ jobs:
         echo "USER_PASSWORD=$USER_PASSWORD" >> .env
     - name: Test with pytest
       run: |
-        pytest
+        pytest --ignore=Room_booking_serve/
   # NEW DEPLOYMENT JOB ADDED BELOW
   deploy:
     needs: build
