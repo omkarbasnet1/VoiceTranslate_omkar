@@ -37,11 +37,14 @@ This project runs the AI models locally on your machine, you need to download:
   **Windows:** ' winget install ffmpeg'.
   **Linux:** 'sudo apt-get install ffmpeg'.
   **Mac**: 'brew install ffmpeg'.
+3. **pyaudio**: 'brew install ffmpeg portaudio'
 
 ### Secrets key
 It requires authentication to communicate with the room booking API.
 This program uses .env file to keep credentials safe which has:
-    SERVER_URL, USER_EMAIL and USER_PASSWORD
+    SERVER_URL = ""
+    USER_EMAIL = "" 
+    and USER_PASSWORD
 The workflow installs dependencies, creates a temporary .env file from the secrets
 
 ### Install dependencies:
@@ -54,9 +57,11 @@ The workflow installs dependencies, creates a temporary .env file from the secre
     talk into your microphone.
     To quit : ctrl + c
     Example: What room are free today? or Do I have any reservations tomorrow?
+    python ai_agent.py is for the 
    
 2. For Automated testing:
    python -m pytest tests/test_integration.py -s 
+
 
 
 
