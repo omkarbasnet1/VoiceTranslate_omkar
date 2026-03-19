@@ -40,8 +40,7 @@ def update_room(name: str, new_capacity: int):
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute("UPDATE booking_meetingroom SET capcity = ? " 
-                       "WHERE room_name = ?",
+        cursor.execute("UPDATE booking_meetingroom SET capacity = ? WHERE room_name = ?",
                        (new_capacity,name))
         if cursor.rowcount == 0:
             return False, f"Room '{name}' not found"
@@ -75,12 +74,11 @@ def remove_room(name: str):
         cursor.execute(query, (room_id,))
         cancelled_users = [row[0] for row in cursor.fetchall()]
 
-        cursor.execute("DELETE FROM booking_bookinghistory " 
-                       "WHERE meeting_room_id = ?",
+        cursor.execute("DELETE FROM booking_bookinghistory WHERE meeting_room_id = ?",
                        (room_id,))
 
-        cursor.execute("DELETE FROM booking_meetingroom " 
-                       "WHERE id = ?", (room_id,))
+        cursor.execute("DELETE FROM booking_meetingroom WHERE id = ?",
+                       (room_id,))
 
         conn.commit()
         with open("cancellation_report.txt", "a") as f:
